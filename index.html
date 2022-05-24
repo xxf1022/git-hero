@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./css/index.css" />
+  <title>英雄列表</title>
+</head>
+
+<body>
+  <div class="main">
+    <video src="https://game.gtimg.cn/images/lol/act/a20220429preedgskins/video.mp4" autoplay loop></video>
+    <div class="container">
+      <ul>
+        <!-- <li>
+          <img src="http://game.gtimg.cn/images/lol/act/img/champion/Annie.png" alt="" />
+          <a href="./detail.html">安妮</a>
+        </li> -->
+      </ul>
+    </div>
+  </div>
+
+  <img src="./img/loading.gif" alt="" class="load-img">
+
+  <script src="./lib/axios.js"></script>
+  <script>
+    axios.interceptors.request.use(
+      function (config) {
+        document.querySelector('.load-img').style.opacity = .8
+        return config
+      },
+      function (error) {
+        return Promise.reject(error)
+      }
+    )
+
+    axios.interceptors.response.use(
+      function (config) {
+        document.querySelector('.load-img').style.opacity = 0
+        return config
+      },
+      function (error) {
+        return Promise.reject(error)
+      }
+    )
+
+    axios({
+      url: "https://autumnfish.cn/api/lol/search",
+      method: "get"
+    }).then(res => {
+      document.querySelector('ul').innerHTML = res.data.data.map(item => {
+        return `<li>
+                  <img src="${item.icon}" alt="" />
+                  <a href="./detail.html?id=${item.heroId}">${item.name + '-' + item.title}</a>
+                </li>`;
+      }).join('')
+    })
+  </script>
+</body>
+
+</html>

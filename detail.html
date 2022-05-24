@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <link rel="stylesheet" href="./css/detail.css">
+  <title>英雄详情</title>
+  <style>
+    .load-img {
+      width: 100px;
+      height: 100px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: .3s;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="bg">
+
+    <!-- <div class="left">
+      <div>
+        <img class="icon" src="https://game.gtimg.cn/images/lol/act/img/skinloading/77000.jpg" alt="" />
+      </div>
+      <span class="title">亡灵战神 -慎</span>
+      <p class="story">
+        拥有危险夺命的能力，却长着一幅小大人儿的可爱模样，这就是掌握深不可测占火魔法的女孩——安妮。安妮生活在诺克萨斯北边的山脚下，但即便是在这种地方，她也依然是魔法师中的异类。她与火焰的紧密关系与生俱来——最初那些火焰是伴随着喜怒无常的冲动情绪出现的，后来她学会了如何掌握这些“好玩的小把戏”。其中，安妮最喜欢的就是她召唤亲爱的泰迪熊提伯斯——那头狂野的守护火兽。如今安妮已经迷失在了永恒的天真里，她在黑暗森林中游荡，寻觅着能陪自己玩耍的人。
+      </p>
+    </div>
+
+    <img class="cover" src="https://game.gtimg.cn/images/lol/act/img/skin/big77005.jpg" alt=""> -->
+
+    <img src="./img/loading.gif" alt="" class="load-img">
+  </div>
+  <script src="./lib/axios.js"></script>
+  <script>
+    axios.interceptors.request.use(
+      function (config) {
+        document.querySelector('.load-img').style.opacity = .8;
+        return config
+      },
+      function (error) {
+        return Promise.reject(error)
+      }
+    )
+    axios.interceptors.response.use(
+      function (config) {
+        document.querySelector('.load-img').style.opacity = 0;
+        return config
+      },
+      function (error) {
+        return Promise.reject(error);
+      }
+    )
+
+    if (location.search === '') {
+      alert('请先去首页选择想要查看的英雄');
+      location.href = './index.html';
+    }
+
+    const id = location.search.split('?')[1].split('=')[1];
+    axios({
+      url: "https://autumnfish.cn/api/lol/info",
+      method: "get",
+      params: {
+        id
+      }
+    }).then(res => {
+      // console.log(res);
+      const {
+        name,
+        title,
+        shortBio
+      } = res.data.data.hero;
+      const {
+        loadingImg,
+        mainImg
+      } = res.data.data.skins[1];
+      document.querySelector('.bg').innerHTML = `
+        <div class="left">
+        <div>
+          <img class="icon" src="${loadingImg}" alt="" />
+        </div>
+        <span class="title">${name} -${title}</span>
+        <p class="story">
+          ${shortBio}
+        </p>
+      </div>
+
+      <img class="cover" src="${mainImg}" alt="">`;
+    })
+  </script>
+</body>
+
+</html>
