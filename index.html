@@ -26,25 +26,25 @@
 
   <script src="./lib/axios.js"></script>
   <script>
-    axios.interceptors.request.use(
-      function (config) {
-        document.querySelector('.load-img').style.opacity = .8
-        return config
-      },
-      function (error) {
-        return Promise.reject(error)
-      }
-    )
+    // axios.interceptors.request.use(
+    //   function (config) {
+    //     document.querySelector('.load-img').style.opacity = .8
+    //     return config
+    //   },
+    //   function (error) {
+    //     return Promise.reject(error)
+    //   }
+    // )
 
-    axios.interceptors.response.use(
-      function (config) {
-        document.querySelector('.load-img').style.opacity = 0
-        return config
-      },
-      function (error) {
-        return Promise.reject(error)
-      }
-    )
+    // axios.interceptors.response.use(
+    //   function (config) {
+    //     document.querySelector('.load-img').style.opacity = 0
+    //     return config
+    //   },
+    //   function (error) {
+    //     return Promise.reject(error)
+    //   }
+    // )
 
     axios({
       url: "https://autumnfish.cn/api/lol/search",
